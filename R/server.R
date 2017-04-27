@@ -15,8 +15,6 @@ if(!require(leaflet)) devtools::install_github("rstudio/leaflet")
 
 if(!exists("NCAA_Locations")) NCAA_Locations <- read.csv("NCAA_Locations.csv",
                                                          stringsAsFactors=FALSE)
-
-
 schedule <- espnTbls[[3]]
 
 
@@ -166,28 +164,31 @@ server <- function(input, output, session) {
                       clearGroup("lines")
       } 
      
-      #Draw basketball icon for the first game
-      else if (nrow(linesNew) == 30) {
+      # #Draw basketball icon for the first game
+      # else if (nrow(linesNew) == 30) {
+      #   leafletProxy("collegeMap", data = schedule()) %>%
+      #     clearGroup("lines") %>%
+      #     clearGroup("basketball") %>%
+      #     addPolylines(lng = linesNew$lon, lat = linesNew$lat, group = "lines") %>%
+      #     addMarkers(lng = linesNew$lon[length(linesNew)] + 50,
+      #                lat = linesNew$lat[length(linesNew)] + 50,
+      #                icon = basketBallIcon,
+      #                group = "basketball")
+      #   
+      #   print(nrow(linesNew))
+      # }
+      
+      # V THis was previous conditions V
+      # Redraw lines as game progresses
+      else {
         leafletProxy("collegeMap", data = schedule()) %>%
           clearGroup("lines") %>%
-          clearGroup("basketball") %>%
-          addPolylines(lng = linesNew$lon, lat = linesNew$lat, group = "lines") %>%
-          addMarkers(lng = linesNew$lon[length(linesNew)] + 50,
-                     lat = linesNew$lat[length(linesNew)] + 50,
-                     icon = basketBallIcon,
-                     group = "basketball")
-        
-        print(nrow(linesNew))
-      }
-      
-      #After first game, don't redraw lines/icon if team is playing in same location
-      else if (schedule()$place[ currentGame() ] != schedule()$place[ currentGame() - 1] ) {
-        leafletProxy("collegeMap", data = schedule()) %>%
           clearGroup(group = "basketball") %>%
-          addPolylines(lng = linesNew$lon, lat = linesNew$lat, group = "lines") %>%
+          addPolylines(lng = linesNew$lon, lat = linesNew$lat, group = "lines", 
+                       opacity = 0.9, weight = 4, color = "red") %>%
           addMarkers(lng = linesNew$lon[nrow(linesNew)],
                      lat = linesNew$lat[nrow(linesNew)],
-                     icon = basketBallIcon, group = "basketball"  )
+                     icon = basketBallIcon, group = "basketball")
       }
       
       #Draw lines and basketball icon

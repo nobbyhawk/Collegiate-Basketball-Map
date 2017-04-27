@@ -81,7 +81,7 @@ travelLines <- function(schedule, gameNum) {
 
 
 loc_wiki <- function() {
-  ## Trying wikipedia table
+  ## Scrapes Div I schools (inc city/state) from Wikipedia
   ## td , th
   
   # Get table of Div I Schools from wikipedia - cities of the university are listed
